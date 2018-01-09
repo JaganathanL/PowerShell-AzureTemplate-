@@ -53,4 +53,4 @@ $VirtualMachine = Set-AzureRmVMOSDisk -VM $vmConfig -Name $osDiskName -VhdUri $O
   Add-AzureRmVMNetworkInterface -Id $nic.Id 
 
 # Create a virtual machine
-New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $vm -Verbose
+New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $VirtualMachine -Verbose
