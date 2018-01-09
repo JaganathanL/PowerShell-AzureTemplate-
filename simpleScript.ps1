@@ -4,7 +4,7 @@ New-AzureRmResourceGroup -Name $resourceGroup -Location $location
 # Create a new storage account
 $StorageAccount = New-AzureRMStorageAccount -Location $location -ResourceGroupName $ResourceGroupName -Type $SkuName -Name $StorageAccountName
 
-Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccountName -ResourceGroupName $resourceGroupName
+Set-AzureRmCurrentStorageAccount -ResourceGroupName $resourceGroupName -Name $StorageAccountName
 
 # Create a storage container to store the virtual machine image
 $containerName = 'osdisks'
