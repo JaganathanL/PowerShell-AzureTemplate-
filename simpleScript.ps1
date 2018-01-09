@@ -1,6 +1,15 @@
 # Create a resource group
 New-AzureRmResourceGroup -Name $resourceGroup -Location $location
 
+# Create a new storage account
+$StorageAccount = New-AzureRMStorageAccount Location $location -ResourceGroupName $ResourceGroupName -Type $SkuName -Name $StorageAccountName
+
+Set-AzureRmCurrentStorageAccount -StorageAccountName $storageAccountName -ResourceGroupName $resourceGroupName
+
+# Create a storage container to store the virtual machine image
+$containerName = 'osdisks'
+$container = New-AzureStorageContainer -Name $containerName -Permission Blob
+
 # Create a subnet configuration
 $subnetConfig = New-AzureRmVirtualNetworkSubnetConfig -Name mySubnet -AddressPrefix 192.168.1.0/24
 
@@ -27,11 +36,18 @@ $nic = New-AzureRmNetworkInterface -Name myNic -ResourceGroupName $resourceGroup
 
 # Create a virtual machine configuration
 
-$vmConfig = New-AzureRmVMConfig -VMName $vmName -VMSize Standard_D1 | `
-Set-AzureRmVMOperatingSystem -Windows -ComputerName $vmName -Credential $cred
+$vmConfig = New-AzureRmVMConfig -VMName $vmName -VMSize Standard_D1
+$vmConfig = Set-AzureRmVMOperatingSystem -VM $vmConfig -Windows -ComputerName $vmName -Credential $cred
+$vmConfig = Set-AzureRmVMSourceImage -VM $vmConfig -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2016-Datacenter -Version latest
 
-$vm = Set-AzureRmVMSourceImage -VM $vmConfig -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2016-Datacenter -Version latest | `
-Add-AzureRmVMNetworkInterface -Id $nic.Id
+$osDiskName = "OsDisk1"
+$osDiskUri = '{0}vhds/{1}-{2}.vhd' -f `
+  $StorageAccount.PrimaryEndpoints.Blob.ToString(),`
+  $vmName.ToLower(), `
+  $osDiskName
+
+$VirtualMachine = Set-AzureRmVMOSDisk -VM $vmConfig -Name $osDiskName -VhdUri $OsDiskUri -CreateOption FromImage | `
+  Add-AzureRmVMNetworkInterface -Id $nic.Id 
 
 # Create a virtual machine
 New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $vm -Verbose
