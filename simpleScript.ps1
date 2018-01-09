@@ -2,7 +2,7 @@
 New-AzureRmResourceGroup -Name $resourceGroup -Location $location
 
 # Create a new storage account
-$StorageAccount = New-AzureRMStorageAccount Location $location -ResourceGroupName $ResourceGroupName -Type $SkuName -Name $StorageAccountName
+$StorageAccount = New-AzureRMStorageAccount -Location $location -ResourceGroupName $ResourceGroupName -Type $SkuName -Name $StorageAccountName
 
 Set-AzureRmCurrentStorageAccount -StorageAccountName $StorageAccount -ResourceGroupName $resourceGroupName
 
