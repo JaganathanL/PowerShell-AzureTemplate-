@@ -34,4 +34,4 @@ $vm = Set-AzureRmVMSourceImage -VM $vmConfig -PublisherName MicrosoftWindowsServ
 Add-AzureRmVMNetworkInterface -Id $nic.Id
 
 # Create a virtual machine
-New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $vm
+New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $vm -Verbose
