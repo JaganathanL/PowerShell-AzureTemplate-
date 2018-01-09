@@ -28,10 +28,10 @@ $nic = New-AzureRmNetworkInterface -Name myNic -ResourceGroupName $resourceGroup
 # Create a virtual machine configuration
 
 $vmConfig = New-AzureRmVMConfig -VMName $vmName -VMSize Standard_D1 | `
-Set-AzureRmVMOperatingSystem -Windows -ComputerName $vmName -Credential $cred | `
-Set-AzureOSDisk "ReadWrite" -VM $vmName | `
-Set-AzureRmVMSourceImage -VM $VM -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2016-Datacenter -Version latest | `
+Set-AzureRmVMOperatingSystem -Windows -ComputerName $vmName -Credential $cred
+
+$vm = Set-AzureRmVMSourceImage -VM $vmConfig -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2016-Datacenter -Version latest | `
 Add-AzureRmVMNetworkInterface -Id $nic.Id
 
 # Create a virtual machine
-New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $vmConfig
+New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $vm
