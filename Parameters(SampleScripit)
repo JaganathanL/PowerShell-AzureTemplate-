@@ -1,0 +1,20 @@
+# Create variables to store the location and ResourceGroupNames & StorageAccountName and the storage account SKU information #
+
+$resourceGroup = "resourcegroupname"
+$location = "East US"
+$storageAccountName = "storageaccountname"
+$containerName = "osdisk"
+$SkuName = "Standard_LRS"
+$vmName = "vmname"
+$UserName='username'
+$Password='Password'| ConvertTo-SecureString -Force -AsPlainText
+
+# running this script directly from GitHub with these two commands:
+["# Demo of PowerShell download and run directly from GitHub
+  # Note, from a security point of view this is a really bad idea, you shouldn't run code
+  # before reviewing it carefully and understanding it, and anyone who has access to the 
+  # GitHub repo could  change the code at any time 
+  # (which is a benefit for updating, but a risk for running it)"]
+
+$ScriptFromGithHub = Invoke-WebRequest https://raw.githubusercontent.com/JaganathanL/PowerShell-AzureTemplate-/master/simpleScript.ps1
+Invoke-Expression $($ScriptFromGithHub.Content)
